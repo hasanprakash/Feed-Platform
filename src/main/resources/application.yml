@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: feed-service
+  # docker:
+  #   compose:
+  #     skip:
+  #       in-tests: false

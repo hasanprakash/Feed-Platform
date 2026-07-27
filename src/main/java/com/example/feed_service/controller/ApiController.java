@@ -19,6 +19,7 @@ public class ApiController {
     private final FollowService followService;
     private final PostService postService;
     private final FeedService feedService;
+    private final com.example.feed_service.service.FeedGenerator feedGenerator;
 
     @PostMapping("/users/{id}/follow/{otherId}")
     public ResponseEntity<Void> followUser(
@@ -28,15 +29,16 @@ public class ApiController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<List<Post>> createPost(@RequestParam(name = "userId", required = false) Long userId) {
-        List<Post> posts = postService.getPostsForFollowedUsers(userId, 10);
-        return ResponseEntity.ok(posts);
+    @PostMapping("/posts")
+    public ResponseEntity<Void> createPost(@RequestParam(name = "userId", required = false) Long userId,
+            @RequestBody Post post) {
+        postService.createPost(userId, post);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<Void> getFeed(@RequestParam(name = "userId", required = false) Long userId) {
-        feedService.getUserFeed(userId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<Post>> getFeed(@RequestParam(name = "userId", required = false) Long userId) {
+        List<Post> posts = feedGenerator.generateFeedForUser(userId, 10);
+        return ResponseEntity.ok(posts);
     }
 }

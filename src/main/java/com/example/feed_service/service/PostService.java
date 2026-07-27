@@ -16,25 +16,16 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final FollowerRepository followerRepository;
 
-    public void createPost() {
-        // TODO: Implement create post logic & Kafka fan-out publication
+    public void createPost(Long userId, Post post) {
+        postRepository.save(post);
     }
 
     /**
-     * Pulls the latest posts from users that the given user follows.
-     * Equivalent to:
-     * SELECT * FROM posts WHERE author_id IN (people I follow) ORDER BY created_at DESC LIMIT limit
+     * Pulls the latest posts from a single author.
      */
-    public List<Post> getPostsForFollowedUsers(Long userId, int limit) {
-        List<Long> followedUserIds = followerRepository.findFollowingIdsByFollowerId(userId);
-
-        if (followedUserIds.isEmpty()) {
-            return Collections.emptyList();
-        }
-
+    public List<Post> getRecentPostsForAuthor(Long authorId, int limit) {
         Pageable pageable = PageRequest.of(0, limit);
-        return postRepository.findByAuthorIdInOrderByCreatedAtDesc(followedUserIds, pageable);
+        return postRepository.findByAuthorIdOrderByCreatedAtDesc(authorId, pageable);
     }
 }

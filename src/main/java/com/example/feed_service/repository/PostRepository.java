@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByAuthorIdInOrderByCreatedAtDesc(Collection<Long> authorIds, Pageable pageable);
+
     List<Post> findByAuthorIdOrderByCreatedAtDesc(Long authorId, Pageable pageable);
 }

@@ -5,3 +5,8 @@ spring:
   #   compose:
   #     skip:
   #       in-tests: false
+
+logging:
+  level:
+    com.example.feed_service: INFO
+
